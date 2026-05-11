@@ -1,0 +1,25 @@
+{
+  "name": "wedding-planner-backend",
+  "version": "1.0.0",
+  "description": "Smart Wedding Planner - Multi-Agent Backend",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.92.0",
+    "@google/genai": "^1.50.1",
+    "bcryptjs": "^3.0.3",
+    "cohere-ai": "^7.17.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "groq-sdk": "^0.15.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongodb-memory-server": "^11.1.0",
+    "mongoose": "^9.6.2",
+    "uuid": "^11.1.0"
+  }
+}
