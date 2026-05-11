@@ -9,7 +9,6 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.92.0",
     "@google/genai": "^1.50.1",
     "bcryptjs": "^3.0.3",
     "cohere-ai": "^7.17.0",

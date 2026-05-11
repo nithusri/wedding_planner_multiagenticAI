@@ -1,7 +1,6 @@
 import { GoogleGenAI } from '@google/genai';
 import Groq from 'groq-sdk';
 import { CohereClientV2 } from 'cohere-ai';
-import Anthropic from '@anthropic-ai/sdk';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -10,7 +9,6 @@ dotenv.config();
 const geminiClient = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 const groqClient = new Groq({ apiKey: process.env.GROQ_API_KEY });
 const cohereClient = new CohereClientV2({ token: process.env.COHERE_API_KEY });
-const anthropicClient = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 // ─── Retry Helper ───────────────────────────────────────────────
 
@@ -159,36 +157,10 @@ export async function cohereGenerate(prompt, systemInstruction = '') {
   throw lastErr;
 }
 
-// ─── Anthropic Provider (Claude 3.5 Sonnet) ─────────────────────
-
-const ANTHROPIC_MODELS = ['claude-3-5-sonnet-20241022', 'claude-3-haiku-20240307'];
-
-export async function anthropicGenerate(prompt, systemInstruction = '') {
-  let lastErr;
-  for (const model of ANTHROPIC_MODELS) {
-    try {
-      const response = await withRetry(() =>
-        anthropicClient.messages.create({
-          model,
-          max_tokens: 4096,
-          system: systemInstruction || undefined,
-          messages: [{ role: 'user', content: prompt }],
-        })
-      );
-      return response.content[0].text;
-    } catch (err) {
-      console.warn(`  Anthropic ${model} failed, trying next…`);
-      lastErr = err;
-    }
-  }
-  throw lastErr;
-}
-
 // ─── Unified Provider Map ───────────────────────────────────────
 
 export const providers = {
   gemini: geminiGenerate,
   groq: groqGenerate,
   cohere: cohereGenerate,
-  anthropic: anthropicGenerate,
 };

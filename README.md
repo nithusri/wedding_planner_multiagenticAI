@@ -1,6 +1,6 @@
 # Smart Wedding Planner — Multi-Agent AI System
 
-A premium, agentic AI-driven wedding planning application that leverages a **Supervisor-Worker multi-agent architecture** to provide a seamless, high-end wedding planning experience. The system integrates multiple state-of-the-art LLMs (Gemini, Groq, Cohere, Anthropic) to handle specialized tasks with expert-level precision.
+A premium, agentic AI-driven wedding planning application that leverages a **Supervisor-Worker multi-agent architecture** to provide a seamless, high-end wedding planning experience. The system integrates multiple state-of-the-art LLMs (Gemini, Groq, Cohere) to handle specialized tasks with expert-level precision.
 
 ## 🌟 Key Features
 
@@ -11,7 +11,7 @@ A premium, agentic AI-driven wedding planning application that leverages a **Sup
   - 📍 **Logistics Scout**: Venue selection and location logistics (Cohere).
   - 📋 **Vendor Orchestrator**: Professional vendor management and timelines (Groq/Llama).
   - 🍽️ **Catering Director**: Bespoke menu design and caterer selection (Groq/Llama).
-- **Multi-LLM Integration**: Dynamically switches between **Gemini**, **Groq (Llama 3.3 70B)**, **Cohere (Command R+)**, and **Anthropic (Claude 3.5 Sonnet)** for the best results.
+- **Multi-LLM Integration**: Dynamically switches between **Gemini**, **Groq (Llama 3.3 70B)**, and **Cohere (Command R+)** for the best results.
 - **Secure Authentication**: Complete user registration and login system backed by **MongoDB**, **Bcrypt**, and **JWT**.
 - **Real-time Planning Panel**: An interactive dashboard that updates in real-time as the AI agents build your style profile, budget, and guest lists.
 - **Premium UI/UX**: A stunning, high-end interface featuring a **Blue & Silver theme** with glassmorphism, smooth animations, and a responsive layout.
@@ -20,7 +20,7 @@ A premium, agentic AI-driven wedding planning application that leverages a **Sup
 
 - **Frontend**: React 19, Vite, Lucide React, Axios, React Markdown.
 - **Backend**: Node.js (Express 5), MongoDB (Mongoose), JSON Web Tokens (JWT).
-- **AI Engine**: Google Gemini API, Groq Cloud SDK, Cohere SDK, Anthropic SDK.
+- **AI Engine**: Google Gemini API, Groq Cloud SDK, Cohere SDK.
 - **Styling**: Premium Custom CSS with variable-driven theme system (Dark/Light modes).
 
 ## 📂 Project Structure
@@ -48,7 +48,7 @@ agentic AI/
 ### Prerequisites
 - **Node.js** installed.
 - **MongoDB** installed and running locally (default: `mongodb://127.0.0.1:27017/wedding-planner`).
-- API Keys for **Gemini**, **Groq**, and **Cohere** (Anthropic optional).
+- API Keys for **Gemini**, **Groq**, and **Cohere**.
 
 ### Backend Setup
 1. Navigate to the `backend` directory.
@@ -64,7 +64,6 @@ agentic AI/
    GEMINI_API_KEY=your_key
    GROQ_API_KEY=your_key
    COHERE_API_KEY=your_key
-   ANTHROPIC_API_KEY=your_key
    ```
 4. Start the server:
    ```bash
