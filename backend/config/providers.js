@@ -1,4 +1,4 @@
-import { GoogleGenAI } from '@google/genai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import Groq from 'groq-sdk';
 import { CohereClientV2 } from 'cohere-ai';
 import dotenv from 'dotenv';
@@ -6,7 +6,7 @@ dotenv.config();
 
 // ─── Initialize Clients ────────────────────────────────────────
 
-const geminiClient = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const geminiClient = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const groqClient = new Groq({ apiKey: process.env.GROQ_API_KEY });
 const cohereClient = new CohereClientV2({ token: process.env.COHERE_API_KEY });
 
@@ -32,11 +32,11 @@ const withRetry = async (fn, retries = 3, delayMs = 1500) => {
 
 // ─── Gemini Provider ────────────────────────────────────────────
 
-const GEMINI_MODELS = ['gemini-2.5-flash', 'gemini-2.0-flash'];
+const GEMINI_MODELS = ['gemini-2.0-flash', 'gemini-1.5-flash'];
 const GEMINI_IMAGE_MODELS = [
   process.env.GEMINI_IMAGE_MODEL,
-  'gemini-2.5-flash-image',
-  'gemini-3-pro-image-preview',
+  'gemini-2.0-flash-exp',
+  'gemini-1.5-flash',
 ].filter(Boolean);
 
 export async function geminiGenerate(prompt, systemInstruction = '') {
@@ -45,14 +45,12 @@ export async function geminiGenerate(prompt, systemInstruction = '') {
   let lastErr;
   for (const model of GEMINI_MODELS) {
     try {
-      const response = await withRetry(() =>
-        geminiClient.models.generateContent({
-          model,
-          contents,
-          config: systemInstruction ? { systemInstruction } : undefined,
-        })
-      );
-      return response.text;
+      const modelInstance = geminiClient.getGenerativeModel({
+        model,
+        systemInstruction: systemInstruction || undefined,
+      });
+      const result = await withRetry(() => modelInstance.generateContent(contents));
+      return result.response.text();
     } catch (err) {
       console.warn(`  Gemini ${model} failed (${err.status}), trying next…`);
       lastErr = err;
@@ -66,17 +64,15 @@ export async function geminiGenerateImage(prompt) {
 
   for (const model of GEMINI_IMAGE_MODELS) {
     try {
-      const response = await withRetry(() =>
-        geminiClient.models.generateContent({
-          model,
-          contents: prompt,
-          config: {
-            responseModalities: ['IMAGE', 'TEXT'],
-          },
+      const modelInstance = geminiClient.getGenerativeModel({ model });
+      const result = await withRetry(() =>
+        modelInstance.generateContent({
+          contents: [{ role: 'user', parts: [{ text: prompt }] }],
         })
       );
 
-      const parts = response?.candidates?.[0]?.content?.parts || [];
+      const response = result.response;
+      const parts = response.candidates?.[0]?.content?.parts || [];
       const imagePart = parts.find(part => part.inlineData?.data);
 
       if (imagePart?.inlineData?.data) {
